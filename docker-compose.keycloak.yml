@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: 
+      - start-dev
+    environment:
+      # Учетные данные администратора
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+      
+      # Настройки базы данных
+      KC_DB: dev-file
+      
+      # Админ пользователь
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      
+      # Дополнительные настройки
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      
+    ports:
+      - "8080:8080"
+    networks:
+      - keycloak-network
+    restart: unless-stopped
+
+networks:
+  keycloak-network:
+    driver: bridge
